@@ -64,7 +64,6 @@ app.get("/users", authenticate, async (req, resp) => {
 });
 
 app.get("/search", authenticate, async (req, resp) => {
-    console.log(req.query);
     if (Object.keys(req.query).length > 0) {
         const { query } = req.query;
         const regexp = new RegExp(query, "i");
@@ -76,29 +75,31 @@ app.get("/search", authenticate, async (req, resp) => {
 
 
 
-app.post('/create', async (req, res) => {
+app.post('/create', authenticate, async (req, res) => {
+
     try {
-        const { title, content, author } = req.body;
+        const { title, content } = req.body;
         const newPost = new Post({
             title,
             content,
-            author
+            author: req.user.userId
         });
         await newPost.save();
 
         res.status(201).json({ id: newPost._id });
     } catch (err) {
-        console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-app.get('/posts', async (req, res) => {
+app.get('/posts', authenticate, async (req, res) => {
     try {
-        const posts = await Post.find().exec();
+        const posts = await Post.find().populate({
+            path: 'author',
+            select: "name email gender city"
+        }).exec();
         res.status(200).json(posts);
     } catch (err) {
-        console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
 });
