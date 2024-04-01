@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, default: mongoose } = require("mongoose");
 
 const UserSchema = new Schema({
     name: {
@@ -22,10 +22,16 @@ const UserSchema = new Schema({
         required: true,
         validate: (gender) => gender === "MALE" || gender === "FEMALE" || gender === "OTHER"
     },
+    bio: {
+        type: String,
+    },
     city: {
         type: String,
         required: true,
-    }
+    },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "post" }]
 });
 
 module.exports = model("user", UserSchema);
