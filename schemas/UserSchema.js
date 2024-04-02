@@ -29,8 +29,24 @@ const UserSchema = new Schema({
         type: String,
         required: true,
     },
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    followers: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+        validate: {
+            validator: function (array) {
+                return new Set(array).size === array.length;
+            },
+            message: () => 'Followers must be unique.'
+        }
+    },
+    following: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+        validate: {
+            validator: function (array) {
+                return new Set(array).size === array.length;
+            },
+            message: () => 'Followers must be unique.'
+        }
+    },
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "post" }]
 });
 

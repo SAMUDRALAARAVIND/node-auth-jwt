@@ -1,10 +1,20 @@
+* All the APIs are private only an authorized user can access these apis.
+
+Pass token in the request headers for authorization.
+
+```json
+{
+    "headers": {
+        "Authorization": "Bearer: ${token}"
+    }
+}
+```
+
 ### Create a New Post
 
 **Endpoint:** `POST /posts/create`
 
 **Description:** Creates a new post.
-
-**Authorization:** Bearer token must be included in the request headers.
 
 **Request Body:**
 ```json
@@ -23,20 +33,35 @@
 
 **Description**: Retrieves all posts of a user.
 
-**Authorization**: Bearer token must be included in the request headers.
-
 **Query Parameters:**
 
 `userId (optional)`: ID of the user whose posts to retrieve. If not provided, retrieves posts of the authenticated user.
 Response: Returns an array of posts with the specified fields.
 
+*** Response ***
+
+*** Status Code *** `200`
+
+```json
+[
+    {
+        "_id": "660ac8743b9b2f0a83da674d",
+        "title": "Data Structures and Algorithms",
+        "content": "I like graph data structure",
+        "imageUrls": [
+            "https://media.geeksforgeeks.org/wp-content/uploads/20200630111809/graph18.jpg"
+        ],
+        "likesCount": 0,
+        "commentsCount": 0
+    }
+]
+```
+
 
 ### Like a Post
-**Endpoint**: POST /posts/like?postId={postId}
+**Endpoint**: `POST /posts/like?postId={postId}`
 
 **Description**: Likes a post.
-
-**Authorization**: Bearer token must be included in the request headers.
 
 **Query Parameters:**
 
@@ -45,11 +70,9 @@ Response: Returns a success message if the post is successfully liked.
 
 
 ### Add a Comment to a Post
-**Endpoint**: POST /posts/comment?postId={postId}
+**Endpoint**: `POST /posts/comment?postId={postId}`
 
 **Description**: Adds a comment to a post.
-
-**Authorization**: Bearer token must be included in the request headers.
 
 **Query Parameters**:
 
@@ -64,11 +87,9 @@ Response: Returns a success message if the post is successfully liked.
 
 
 ### Get Comments of a Post
-**Endpoint**: GET /posts/comments?postId={postId}
+**Endpoint**: `GET /posts/comments?postId={postId}`
 
 **Description**: Retrieves comments of a post.
-
-**Authorization**: Bearer token must be included in the request headers.
 
 **Query Parameters**:
 
