@@ -7,7 +7,8 @@ function authenticate(req, resp, next) {
         const token = req.headers["authorization"].slice(8);
         jwt.verify(token, secretKey, (error, user) => {
             if (error) {
-                resp.status(403).json({ message: error.message })
+                resp.status(403).json({ message: error.message });
+                return;
             }
             req.user = user;
             next();

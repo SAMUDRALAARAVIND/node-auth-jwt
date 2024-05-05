@@ -10,7 +10,10 @@ router.get("/suggestions", async (req, resp) => {
     const userId = req.user.userId;
     try {
         const user = await UserSchema.findById(userId, { following: 1, _id: 0 })
-        const suggestions = await UserSchema.find({ _id: { $nin: user.following } }, { name: 1, email: 1, gender: 1, city: 1 })
+        const excludeUserIds = user.following.map(i => i._id);
+        excludeUserIds.push(userId);
+        console.log(excludeUserIds)
+        const suggestions = await UserSchema.find({ _id: { $nin: excludeUserIds } }, { name: 1, email: 1, gender: 1, city: 1 })
 
         const response = suggestions.map(suggestion => ({ ...suggestion.toObject(), following: false }));
 
@@ -86,6 +89,8 @@ router.get("/followers", async (req, res) => {
             const isFollowing = user.following.some(followedUser => followedUser._id.equals(follower._id));
             return { ...follower.toObject(), following: isFollowing };
         });
+
+        console.log(userId, followersWithFollowing, user);
 
         res.json(followersWithFollowing);
     } catch (err) {

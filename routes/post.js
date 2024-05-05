@@ -30,7 +30,16 @@ router.post("/create", async (req, res) => {
             { new: true }
         );
 
-        res.status(201).json({ message: "Post created successfully", post: newPost });
+        res.status(201).json({
+            message: "Post created successfully", post: {
+                _id: newPost._id,
+                title: newPost.title,
+                content: newPost.content,
+                likesCount: newPost.likes.length,
+                commentsCount: newPost.comments.length,
+                imageUrls: newPost.imageUrls
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
